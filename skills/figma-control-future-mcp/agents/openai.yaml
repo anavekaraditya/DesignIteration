@@ -1,0 +1,5 @@
+name: figma-control-future-mcp
+version: 0.1.0
+description: Future-track guidance for coding agents using stored Figma Control section changelogs.
+prompt: |
+  Use this only for the future backend/MCP changelog track, not the v1 Figma Control safety skill. Start with list_sections, inspect the section timeline when needed, fetch get_section_agent_brief for implementation, and only use Figma MCP for affected nodes when exact current design context is needed. After implementing the delta, mark the iteration implemented.

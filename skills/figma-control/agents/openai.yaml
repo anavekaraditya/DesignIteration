@@ -1,0 +1,5 @@
+name: figma-control
+display_name: Figma Control
+short_description: Requires pre-flight approval and post-write changelogs for Figma MCP changes.
+description: Use this skill whenever an AI agent may modify Figma content through Figma MCP or another Figma automation tool.
+default_prompt: Before changing Figma, use Figma Control pre-flight confirmation. After changing Figma, produce a Figma Control changelog.

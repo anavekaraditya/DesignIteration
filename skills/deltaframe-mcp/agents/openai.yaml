@@ -1,5 +1,0 @@
-name: deltaframe-mcp
-version: 0.1.0
-description: Guidance for coding agents using DeltaFrame MCP section changelogs.
-prompt: |
-  Use DeltaFrame MCP as the source of truth for design iteration deltas. Start with list_sections, inspect the section timeline when needed, fetch get_section_agent_brief for implementation, and only use Figma MCP for affected nodes when exact current design context is needed. After implementing the delta, mark the iteration implemented.

@@ -1,144 +1,172 @@
-# DeltaFrame
+# Figma Control
 
-Implementation-aware changelogs for Figma-to-code workflows.
+Figma MCP safety and changelog rules for AI agents.
 
-DeltaFrame is a private beta scaffold for a Figma plugin, backend, shared diff engine, MCP server, and Codex skill. It helps designers save a Figma section as a baseline, copy that section for iterations, generate a visible changelog frame beside the iteration, and expose the section timeline to AI coding agents.
+Figma Control v1 is intentionally small: one portable skill file that makes any AI agent ask before it changes Figma and report exactly what it changed afterward.
 
-## Workspace
+> No AI agent should silently change a Figma file.
+
+## What v1 Solves
+
+Figma MCP lets AI agents write directly to design files. That is powerful, but risky:
+
+- the agent may change more than you expected;
+- Figma undo may not help after the session moves on;
+- version history gives visual snapshots, not a structured list of changes;
+- small edits such as copy, spacing, opacity, or variant changes are easy to miss.
+
+Figma Control v1 teaches the agent two behaviors:
+
+1. **Pre-flight confirmation** before Figma writes.
+2. **Post-write changelog** after Figma writes.
+
+That is the complete v1.
+
+## Repository Layout
 
 ```text
-apps/
-  figma-plugin/   Figma plugin main thread and framework-free UI
-  server/         Hono API with file-backed SQLite via sql.js
-  mcp-server/     MCP stdio server for AI coding agents
-packages/
-  core/           Shared schemas, normalizer, diff engine, changelog logic
 skills/
-  deltaframe-mcp/ Codex skill for consuming DeltaFrame MCP tools
+  figma-control/
+    figma-control.md       Portable model-neutral rules file
+    SKILL.md            Codex-compatible skill wrapper
+    agents/openai.yaml  Skill UI metadata
+  figma-control-future-mcp/       Future-track backend/MCP changelog skill
+docs/
+  figma-control-v1-evaluation.md
+apps/
+packages/
 ```
 
-## Quick Start
+The existing `apps/` and `packages/` plugin/backend prototype remains in the repo as deferred experimental work. It is not the v1 product focus.
+
+## Install
+
+### Claude Code
+
+Copy the portable rules file into your project:
 
 ```bash
-npm install
-npm run build
-npm test
-npm run dev:server
+mkdir -p .claude/skills/figma-control
+cp skills/figma-control/figma-control.md .claude/skills/figma-control/figma-control.md
 ```
 
-The backend defaults to `http://localhost:8787` and persists to `data/deltaframe.sqlite`.
-For local Figma testing on the alternate port:
+Or paste the contents of `skills/figma-control/figma-control.md` into your Claude project instructions.
+
+### Cursor
+
+Copy the same rules file into Cursor rules:
 
 ```bash
-PORT=8788 npm run dev:server
+mkdir -p .cursor/rules
+cp skills/figma-control/figma-control.md .cursor/rules/figma-control.md
 ```
 
-## Figma Plugin
+### OpenAI Codex
 
-Build the plugin:
+Use the local Codex skill folder:
 
-```bash
-npm run build -w @deltaframe/figma-plugin
+```text
+skills/figma-control/SKILL.md
 ```
 
-In Figma Desktop, import `apps/figma-plugin/manifest.json` as a development plugin. The default plugin flow is output-driven:
+Or paste the contents of `skills/figma-control/figma-control.md` into the system/developer instructions for any agent that has Figma MCP write access.
 
-1. Select a top-level section frame/component.
-2. Click `Create changelog`.
-3. If it is new, DeltaFrame saves it as a baseline.
-4. Copy the section and make a design iteration.
-5. Select the iteration and click `Create changelog`.
-6. DeltaFrame smart-matches the section, compares against the previous iteration, and writes a draft changelog frame beside it.
-7. Optionally review/edit the changelog and approve it so MCP can serve it.
+### Any Other Agent
 
-Advanced settings keep the API URL, Gemini key, manual section picker, and manual baseline/iteration controls available for beta debugging.
+Paste `figma-control.md` into the agent's persistent rules, project instructions, or system prompt.
 
-## Gemini Visual Enhancement
+The skill does not require a backend, plugin, database, Gemini key, or Figma plugin install.
 
-DeltaFrame can optionally use Gemini to compare before/after checkpoint screenshots and improve the deterministic changelog. The deterministic Figma JSON diff still runs first; Gemini only rewrites the summary/implementation notes and can add obvious visual-only changes for designer review.
+## Rule 1: Pre-flight Confirmation
 
-```bash
-GEMINI_API_KEY=your_key_here GEMINI_MODEL=gemini-2.5-flash PORT=8788 npm run dev:server
+Before any Figma write operation, the agent must output:
+
+```text
+---FIGMA CONTROL PRE-FLIGHT---
+I am about to make the following changes to your Figma file:
+
+Frame: Hero — Desktop
+  - CTA Button  |  resized       |  height 44px → height 56px
+  - CTA Button  |  color changed |  #9CA3AF → #1A56DB
+  - CTA Button  |  copy changed  |  "Get Started" → "Start Free Trial"
+
+Total: 3 changes across 1 frame.
+Shall I proceed?
+---END PRE-FLIGHT---
 ```
 
-If `GEMINI_API_KEY` is missing, DeltaFrame falls back to deterministic changelogs. The Figma plugin exports a PNG screenshot with each section iteration, stores it in the local beta database, and the backend sends the before/after images to Gemini during `POST /sections/:sectionId/iterations`.
+The agent must wait for explicit approval before writing unless the original prompt already clearly says to proceed, such as "go ahead", "do it", or "no need to confirm".
 
-The MCP server does not need a separate Gemini integration. Once a changelog is approved, MCP tools such as `get_section_agent_brief` and `get_latest_section_delta` automatically return the Gemini-enhanced changelog.
+## Rule 2: Post-write Changelog
 
-## Comparison Engine
+After all Figma writes complete, the agent must output:
 
-DeltaFrame now compares iterations in the same spirit as a Figma MCP audit:
+```text
+---FIGMA CONTROL CHANGELOG---
+file:      My Product Design System
+timestamp: 2026-05-19 14:32 UTC
+version_history: https://www.figma.com/file/aBcDeFgH/My-Product-Design-System
 
-- Normalizes Figma `JSON_REST_V1` exports into stable trees with layout, typography, styling, token, component, and variable metadata.
-- Semantically matches copied or renamed layers using node type, name similarity, text, component keys, main component ids, size, position, depth, and parent role.
-- Diffs exact properties including copy, visibility, width/height, movement above 2px, auto-layout settings, padding, item spacing, fills, strokes, effects, corner radius, typography, variable bindings, variant props, and component props.
-- Groups raw property diffs into designer-level events such as moved, resized, padding changed, spacing changed, color changed, font changed, copy changed, added, removed, hidden, and variant changed.
-- Suggests likely section families for untagged copied iterations so the plugin can create changelogs without exposing an export step.
-- Carries `matchConfidence` and `matchReason` into the changelog so low-confidence copied-layer matches can be reviewed before implementation.
-- Uses Gemini only as an enhancement layer for summary quality, grouping, implementation notes, and obvious visual-only observations.
+changes:
 
-## MCP Server
+  Frame: Hero — Desktop
+    - layer:     CTA Button
+      property:  resized
+      from:      height 44px
+      to:        height 56px
 
-Run the backend first, then run the MCP server:
+    - layer:     CTA Button
+      property:  color changed
+      from:      #9CA3AF
+      to:        #1A56DB
 
-```bash
-DELTAFRAME_API_URL=http://localhost:8788 npm run dev:mcp
+    - layer:     CTA Button
+      property:  copy changed
+      from:      "Get Started"
+      to:        "Start Free Trial"
+
+summary:   3 changes across 1 frame.
+           Updated CTA size, color, and copy in the desktop hero.
+---END CHANGELOG---
 ```
 
-Tools exposed:
+The changelog must list every changed node/property individually and use designer-level event names such as `moved`, `resized`, `color changed`, `copy changed`, `hidden`, `shown`, `added`, or `removed`.
 
-- `list_sections`
-- `get_section_timeline`
-- `get_latest_section_delta`
-- `get_section_agent_brief`
-- `mark_iteration_implemented`
-- `list_projects`
-- `list_checkpoints`
-- `get_project_status`
-- `list_changelogs`
-- `get_latest_changelog`
-- `get_changelog_by_id`
-- `get_changes_since_checkpoint`
-- `get_affected_nodes`
-- `get_agent_brief`
-- `mark_implemented`
+## What Counts as a Figma Write
 
-## Codex Skill
+The rules apply to any action that changes Figma content:
 
-The repo includes a local skill at `skills/deltaframe-mcp/SKILL.md`. Install or copy that skill into your Codex skills directory when you want Codex to automatically follow the DeltaFrame workflow:
+- create, update, duplicate, move, resize, reorder, hide, show, rename, or delete nodes;
+- change fills, strokes, copy, typography, variables, styles, variants, component properties, effects, or images;
+- import assets or replace images.
 
-1. `list_sections`
-2. `get_section_timeline`
-3. `get_latest_section_delta`
-4. `get_section_agent_brief`
-5. Use Figma MCP only for ambiguous or low-confidence affected nodes.
-6. `mark_iteration_implemented`
+Read-only Figma inspection does not trigger the rules.
 
-## API Surface
+## Evaluation
 
-- `GET /health`
-- `GET /sections`
-- `POST /sections/suggest-match`
-- `POST /sections`
-- `GET /sections/:sectionId/timeline`
-- `POST /sections/:sectionId/iterations`
-- `GET /sections/:sectionId/latest-delta`
-- `GET /sections/:sectionId/agent-brief`
-- `POST /iterations/:iterationId/implemented`
-- `GET /projects`
-- `GET /projects/:projectId/status`
-- `GET /projects/:projectId/checkpoints`
-- `GET /projects/:projectId/changelogs`
-- `POST /checkpoints`
-- `POST /compare`
-- `GET /changelogs/:changelogId`
-- `PATCH /changelogs/:changelogId`
-- `POST /changelogs/:changelogId/approve`
-- `POST /changelogs/:changelogId/implemented`
-- `GET /projects/:projectId/latest-changelog`
-- `GET /projects/:projectId/agent-brief`
-- `GET /projects/:projectId/changes-since/:checkpointId`
+Use [docs/figma-control-v1-evaluation.md](docs/figma-control-v1-evaluation.md) to test whether an agent follows the skill.
 
-## Shipping Notes
+The v1 pass criteria are simple:
 
-This repo is aimed at a private beta first. Before Figma Community submission, prepare a support contact, privacy policy, network access disclosure, demo file, and review checklist for empty selection, wrong node type, large files, deleted nodes, variants, and offline backend behavior.
+- the agent stops before Figma writes;
+- the pre-flight tells you what will change;
+- the changelog tells you what changed;
+- partial failures are reported safely.
+
+## Not in v1
+
+Do not build these until the safety skill is tested on real Figma MCP prompts:
+
+- persistent changelog storage;
+- automatic Figma version snapshots;
+- plugin UI inside Figma;
+- semantic intent prompts;
+- LLM/Gemini synthesis;
+- backend MCP changelog delivery;
+- revert-from-changelog.
+
+## Future Track
+
+The older plugin/backend prototype can still become a future Figma Control product if v1 proves useful. That future track may include stored changelog timelines, Figma plugin review UI, MCP tools for approved deltas, and implementation loop-closing.
+
+For now, v1 is one file and two rules.

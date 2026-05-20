@@ -1,15 +1,21 @@
 ---
-name: deltaframe-mcp
-description: Use when implementing code from DeltaFrame section iteration changelogs via MCP, including fetching section timelines, reading latest deltas, mapping design changes to code edits, and marking iterations implemented.
+name: figma-control-future-mcp
+description: Future-track skill for implementing code from Figma Control backend section changelogs via MCP. Do not use for Figma Control v1 Figma write safety; use figma-control instead.
 ---
 
-# DeltaFrame MCP
+# Figma Control MCP Future Track
 
-Use DeltaFrame as design-change memory for Figma-to-code work. DeltaFrame complements Figma MCP: DeltaFrame answers what changed between section iterations; Figma MCP answers what the full selected design looks like now.
+This is not the v1 product direction.
+
+Figma Control v1 is the portable Figma MCP safety skill in `skills/figma-control`.
+
+Use this older skill only when a future Figma Control backend/MCP changelog server is available and the task explicitly involves consuming stored Figma Control section deltas.
+
+Use Figma Control as design-change memory for Figma-to-code work. Figma Control complements Figma MCP: Figma Control answers what changed between section iterations; Figma MCP answers what the full selected design looks like now.
 
 ## Workflow
 
-1. Confirm the DeltaFrame backend and MCP server are available. The MCP server usually points at `DELTAFRAME_API_URL=http://localhost:8788`.
+1. Confirm the Figma Control backend and MCP server are available. The current prototype MCP server should point at the local backend URL, usually `http://localhost:8788`.
 2. Call `list_sections` to find the tracked design section family.
 3. Call `get_section_timeline` when you need baseline and iteration history.
 4. Call `get_latest_section_delta` with `include_drafts: true` during active collaboration, or without drafts for approved implementation work.
@@ -21,11 +27,11 @@ Use DeltaFrame as design-change memory for Figma-to-code work. DeltaFrame comple
 ## Rules
 
 - Prefer section-aware tools over older project/checkpoint tools.
-- Do not infer design changes that are not present in the DeltaFrame delta or confirmed through Figma MCP.
+- Do not infer design changes that are not present in the Figma Control delta or confirmed through Figma MCP.
 - Use `approved` deltas for production work. Use draft deltas only when the designer is actively asking for iteration help.
 - Pay special attention to `copy`, `layout`, `style`, `token`, `component`, `visibility`, and `structure` categories; they map to different code surfaces.
 - Low-confidence matches usually mean a copied or renamed Figma layer was semantically matched. Verify exact context before broad refactors.
-- If DeltaFrame reports no implementation-relevant changes, do not re-read or rebuild the whole design unless the user explicitly asks.
+- If Figma Control reports no implementation-relevant changes, do not re-read or rebuild the whole design unless the user explicitly asks.
 
 ## Change Mapping
 
