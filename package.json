@@ -1,0 +1,27 @@
+{
+  "name": "deltaframe",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Implementation-aware changelogs for Figma-to-code workflows.",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @deltaframe/core && npm run build -w @deltaframe/server && npm run build -w @deltaframe/mcp-server && npm run build -w @deltaframe/figma-plugin",
+    "check": "npm run build -w @deltaframe/core && npm run check -w @deltaframe/core && npm run check -w @deltaframe/server && npm run check -w @deltaframe/mcp-server && npm run check -w @deltaframe/figma-plugin",
+    "test": "npm run test -ws --if-present",
+    "dev:server": "npm run dev -w @deltaframe/server",
+    "dev:mcp": "npm run dev -w @deltaframe/mcp-server",
+    "dev:plugin": "npm run dev -w @deltaframe/figma-plugin"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}

@@ -1,0 +1,185 @@
+:root {
+  color: var(--figma-color-text, #1f2328);
+  background: var(--figma-color-bg, #fff);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 12px;
+  text-transform: capitalize;
+  margin: 12px 0 8px;
+}
+
+p,
+span,
+label,
+footer {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+nav,
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+nav button {
+  flex: 1 1 auto;
+  text-transform: capitalize;
+}
+
+button,
+input,
+textarea,
+select {
+  border: 1px solid var(--figma-color-border, #d0d7de);
+  border-radius: 6px;
+  font: inherit;
+}
+
+button {
+  min-height: 32px;
+  padding: 0 10px;
+  background: var(--figma-color-bg-brand, #0d99ff);
+  color: var(--figma-color-text-onbrand, #fff);
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+button.active,
+.change button {
+  background: var(--figma-color-bg-secondary, #f6f8fa);
+  color: var(--figma-color-text, #1f2328);
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  min-height: 32px;
+  padding: 7px 8px;
+  background: var(--figma-color-bg, #fff);
+  color: inherit;
+}
+
+textarea {
+  min-height: 72px;
+  resize: vertical;
+}
+
+label,
+section,
+.settings {
+  display: grid;
+  gap: 8px;
+}
+
+section {
+  padding: 12px;
+  border: 1px solid var(--figma-color-border, #d0d7de);
+  border-radius: 8px;
+}
+
+.settings {
+  grid-template-columns: 1fr;
+}
+
+.selection {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  background: var(--figma-color-bg-secondary, #f6f8fa);
+}
+
+.pill {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--figma-color-bg-brand-tertiary, #e5f4ff);
+  color: var(--figma-color-text-brand, #0969da);
+}
+
+.checkbox {
+  display: flex;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox input {
+  width: auto;
+  min-height: 0;
+}
+
+.change {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--figma-color-border, #d0d7de);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.change > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+footer {
+  margin-top: auto;
+  padding-top: 10px;
+  color: var(--figma-color-text-secondary, #57606a);
+}

@@ -1,0 +1,464 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>DeltaFrame Project Synopsis</title>
+    <style>
+      @page {
+        size: Letter;
+        margin: 0.65in;
+      }
+
+      :root {
+        color: #172033;
+        background: #ffffff;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-size: 10.5pt;
+        line-height: 1.48;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: 29pt;
+        line-height: 1.04;
+        letter-spacing: 0;
+        max-width: 8.2in;
+      }
+
+      h2 {
+        margin: 26px 0 9px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #d8dee8;
+        font-size: 15pt;
+        color: #0d3b66;
+      }
+
+      h3 {
+        margin: 16px 0 5px;
+        font-size: 11.5pt;
+        color: #1d3557;
+      }
+
+      ul,
+      ol {
+        margin: 7px 0 0 19px;
+        padding: 0;
+      }
+
+      li {
+        margin: 3px 0;
+      }
+
+      strong {
+        color: #0f172a;
+      }
+
+      code {
+        padding: 1px 4px;
+        border-radius: 4px;
+        background: #eef3f8;
+        color: #0f3d5e;
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-size: 9pt;
+      }
+
+      .cover {
+        min-height: 8.7in;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        page-break-after: always;
+      }
+
+      .eyebrow {
+        margin-bottom: 16px;
+        color: #0d6efd;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 9pt;
+      }
+
+      .subtitle {
+        margin-top: 16px;
+        max-width: 7.2in;
+        font-size: 14pt;
+        color: #435167;
+      }
+
+      .meta {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .meta-card,
+      .callout,
+      .card {
+        border: 1px solid #d8dee8;
+        border-radius: 8px;
+        background: #f8fafc;
+      }
+
+      .meta-card {
+        padding: 12px;
+      }
+
+      .meta-label {
+        color: #667085;
+        font-size: 8.5pt;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .meta-value {
+        margin-top: 3px;
+        font-weight: 700;
+      }
+
+      .callout {
+        margin: 13px 0;
+        padding: 13px 14px;
+        border-left: 4px solid #0d6efd;
+        background: #f3f8ff;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .card {
+        padding: 12px;
+        break-inside: avoid;
+      }
+
+      .card h3 {
+        margin-top: 0;
+      }
+
+      .workflow {
+        counter-reset: step;
+        display: grid;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .step {
+        position: relative;
+        padding: 10px 12px 10px 38px;
+        border: 1px solid #d8dee8;
+        border-radius: 8px;
+        background: #ffffff;
+      }
+
+      .step::before {
+        counter-increment: step;
+        content: counter(step);
+        position: absolute;
+        left: 10px;
+        top: 9px;
+        width: 18px;
+        height: 18px;
+        border-radius: 999px;
+        background: #0d6efd;
+        color: white;
+        font-size: 8.5pt;
+        font-weight: 700;
+        text-align: center;
+        line-height: 18px;
+      }
+
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      .tag {
+        padding: 4px 7px;
+        border-radius: 999px;
+        background: #e7f0ff;
+        color: #174ea6;
+        font-size: 8.5pt;
+        font-weight: 650;
+      }
+
+      .page-break {
+        page-break-before: always;
+      }
+
+      .footer-note {
+        margin-top: 26px;
+        color: #667085;
+        font-size: 9pt;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="cover">
+      <div>
+        <p class="eyebrow">Project Synopsis</p>
+        <h1>DeltaFrame: Design-Change Memory for AI Coding Agents</h1>
+        <p class="subtitle">
+          A Figma plugin, backend, MCP server, and Codex skill that help designers turn section iterations into clear,
+          designer-level changelogs for humans and AI implementation tools.
+        </p>
+        <div class="meta">
+          <div class="meta-card">
+            <div class="meta-label">Stage</div>
+            <div class="meta-value">Private beta prototype</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-label">Audience</div>
+            <div class="meta-value">Designers + AI coders</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-label">Positioning</div>
+            <div class="meta-value">Complements Figma MCP</div>
+          </div>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>Core thesis:</strong> Figma MCP can tell an AI what a design looks like now. DeltaFrame answers the
+        narrower handoff question: what changed since the last implementation baseline?
+      </div>
+    </section>
+
+    <main>
+      <h2>1. Problem</h2>
+      <p>
+        Product designers iterate quickly, often by duplicating a section or frame and exploring a new version beside
+        the old one. Developers and AI coding agents do not always need the entire design context again; they need a
+        concise, trustworthy explanation of what changed.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <h3>Current pain</h3>
+          <ul>
+            <li>Design changes are buried in duplicated frames and renamed layers.</li>
+            <li>Handoff notes are manual, inconsistent, or missing.</li>
+            <li>AI coding tools can over-read the whole design instead of updating only affected code.</li>
+            <li>Small but important changes such as spacing, copy, variants, and states are easy to miss.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Opportunity</h3>
+          <ul>
+            <li>Capture design iteration history directly from Figma.</li>
+            <li>Generate designer-readable changelogs on the canvas.</li>
+            <li>Expose compact approved context through MCP.</li>
+            <li>Help AI agents update only what changed.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>2. Product Concept</h2>
+      <p>
+        DeltaFrame tracks section-based design iteration. A designer selects a Figma section, saves it as a baseline,
+        copies it for iteration, and then asks DeltaFrame to create a changelog. The plugin compares the selected
+        iteration with the previous tracked version and writes a visible changelog frame beside the design.
+      </p>
+      <div class="callout">
+        <strong>Simple user promise:</strong> Select a section, click <code>Create changelog</code>, and get a useful
+        designer-level summary of what changed.
+      </div>
+      <div class="tag-row">
+        <span class="tag">Moved</span>
+        <span class="tag">Resized</span>
+        <span class="tag">Padding changed</span>
+        <span class="tag">Spacing changed</span>
+        <span class="tag">Color changed</span>
+        <span class="tag">Font changed</span>
+        <span class="tag">Copy changed</span>
+        <span class="tag">Added</span>
+        <span class="tag">Removed</span>
+        <span class="tag">Hidden</span>
+        <span class="tag">Variant changed</span>
+      </div>
+
+      <h2>3. Current Architecture</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Figma Plugin</h3>
+          <ul>
+            <li>Captures selected section snapshots using Figma <code>JSON_REST_V1</code>.</li>
+            <li>Exports PNG screenshots for visual enhancement.</li>
+            <li>Stores section and iteration ids in shared plugin data.</li>
+            <li>Creates or updates visible changelog frames beside iterations.</li>
+            <li>Now centers around one action: <code>Create changelog</code>.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Backend</h3>
+          <ul>
+            <li>Node + Hono API with file-backed SQLite via <code>sql.js</code>.</li>
+            <li>Stores projects, sections, iterations, checkpoints, snapshots, and changelogs.</li>
+            <li>Performs deterministic semantic matching, deep diffs, designer-level grouping, and optional Gemini enhancement.</li>
+            <li>Provides smart section matching for untagged copied iterations.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>MCP Server</h3>
+          <ul>
+            <li>Exposes section-aware tools for AI coding agents.</li>
+            <li>Provides latest section delta and compact implementation briefs.</li>
+            <li>Lets agents mark iterations implemented after code changes.</li>
+            <li>Delivers compact approved or draft context; backend owns storage and diffing.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Codex Skill</h3>
+          <ul>
+            <li>Teaches Codex how to consume DeltaFrame MCP tools.</li>
+            <li>Prioritizes section timelines and latest deltas.</li>
+            <li>Uses Figma MCP only when the DeltaFrame brief is ambiguous or low confidence.</li>
+            <li>Encourages targeted code changes instead of full-screen reimplementation.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>4. Simplified Workflow</h2>
+      <div class="workflow">
+        <div class="step"><strong>Select a Figma section.</strong> If it is new, DeltaFrame treats it as an untracked section.</div>
+        <div class="step"><strong>Click Create changelog.</strong> The plugin exports the snapshot internally; there is no visible export step.</div>
+        <div class="step"><strong>First click creates a baseline.</strong> The selected node is tagged with a section id and baseline iteration id.</div>
+        <div class="step"><strong>Copy and change the section.</strong> The designer works naturally on a duplicated section/frame.</div>
+        <div class="step"><strong>Click Create changelog again.</strong> DeltaFrame smart-matches untagged copies or uses existing metadata.</div>
+        <div class="step"><strong>Draft changelog appears on canvas.</strong> The frame summarizes designer-level changes and includes the MCP changelog id.</div>
+        <div class="step"><strong>Optional review and approval.</strong> Designers can edit notes and approve the changelog for MCP consumption.</div>
+      </div>
+
+      <h2 class="page-break">5. Comparison Logic</h2>
+      <p>
+        DeltaFrame keeps deterministic data as the source of truth. It normalizes Figma exports into stable trees and
+        compares iterations through semantic node matching, raw property diffs, and designer-level aggregation.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <h3>Semantic matching</h3>
+          <ul>
+            <li>Matches by Figma node id when possible.</li>
+            <li>Falls back to type, name similarity, text, component keys, main component ids, size, position, depth, and parent role.</li>
+            <li>Stores match confidence and match reason for review.</li>
+            <li>Ignores root-frame placement offsets caused by copying a section beside the baseline.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Designer-level aggregation</h3>
+          <ul>
+            <li>Groups raw x/y changes into one moved event.</li>
+            <li>Groups width/height into resized.</li>
+            <li>Groups padding and gap changes into spacing notes.</li>
+            <li>Groups typography, color, component variant, token, copy, visibility, added, and removed changes.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>6. Gemini Enhancement</h2>
+      <p>
+        Gemini is optional and is not required for correctness. The backend first generates a deterministic changelog
+        from Figma JSON. If a Gemini key is configured, screenshots and deterministic diffs are sent to Gemini to
+        improve summary quality, grouping, implementation notes, and obvious visual-only observations.
+      </p>
+      <div class="callout">
+        <strong>Design principle:</strong> AI can improve language and catch visible context, but it should not replace
+        the deterministic evidence used to decide what changed.
+      </div>
+
+      <h2>7. MCP and AI Agent Use</h2>
+      <p>
+        DeltaFrame’s MCP server exposes section-aware tools such as <code>list_sections</code>,
+        <code>get_section_timeline</code>, <code>get_latest_section_delta</code>, <code>get_section_agent_brief</code>,
+        and <code>mark_iteration_implemented</code>. The intended coding-agent flow is:
+      </p>
+      <ol>
+        <li>Find the relevant tracked section.</li>
+        <li>Fetch the latest approved or draft section delta.</li>
+        <li>Read the compact agent brief.</li>
+        <li>Use Figma MCP only if exact current design context is needed.</li>
+        <li>Update only the affected code.</li>
+        <li>Mark the iteration implemented.</li>
+      </ol>
+
+      <h2>8. Current State</h2>
+      <ul>
+        <li>TypeScript monorepo scaffold exists for plugin, backend, MCP server, and core package.</li>
+        <li>Section and iteration timelines are implemented.</li>
+        <li>Designer-level changelog grouping is implemented.</li>
+        <li>One-click plugin flow is implemented in the generated plugin UI.</li>
+        <li>Backend smart-match endpoint exists for untagged copied iterations.</li>
+        <li>Gemini enhancement is optional and falls back to deterministic changelogs.</li>
+        <li>Automated checks currently cover core diffing, designer grouping, section timeline storage, and smart matching.</li>
+      </ul>
+
+      <h2>9. Open Questions for Feedback</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Product</h3>
+          <ul>
+            <li>Is “design-change memory for AI coding agents” the clearest positioning?</li>
+            <li>Should the primary user be designers, developers, or design-system teams?</li>
+            <li>Should canvas changelog frames be the main output, or should the plugin review UI be primary?</li>
+            <li>What would make teams trust generated design changelogs?</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Workflow</h3>
+          <ul>
+            <li>Is one-click baseline/changelog creation simple enough?</li>
+            <li>When should a changelog be auto-approved for MCP, if ever?</li>
+            <li>How much control should advanced users have over matching, thresholds, and grouping?</li>
+            <li>Should designers be able to compare against any prior iteration, not only the previous one?</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Technology</h3>
+          <ul>
+            <li>How robust should visual diffing become beyond Figma JSON metadata?</li>
+            <li>Should Gemini or another LLM produce higher-level product implications?</li>
+            <li>What is the right storage model for teams: local, hosted SaaS, or both?</li>
+            <li>How should this integrate with existing Figma MCP workflows?</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Go-to-market</h3>
+          <ul>
+            <li>Who feels this pain most acutely: designers using AI coders, developers consuming Figma, or design systems teams?</li>
+            <li>Would people install a Figma plugin for this, or expect it inside their coding agent?</li>
+            <li>What would be a compelling private beta test?</li>
+            <li>What demo file or workflow would best prove the value?</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>10. Short Pitch</h2>
+      <div class="callout">
+        DeltaFrame helps designers and AI coding agents understand what changed between Figma design iterations. It
+        turns copied sections into tracked timelines, writes readable changelog frames on the Figma canvas, and exposes
+        compact implementation briefs through MCP so AI coding tools can update only the affected code.
+      </div>
+
+      <p class="footer-note">
+        Prepared as a portable project synopsis for feedback, critique, and iteration in other AI tools.
+      </p>
+    </main>
+  </body>
+</html>

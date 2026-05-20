@@ -1,0 +1,17 @@
+{
+  "name": "DeltaFrame",
+  "id": "deltaframe-private-beta",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "ui": "dist/index.html",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": [
+      "http://localhost:8787",
+      "http://localhost:8788",
+      "https://api.deltaframe.local"
+    ],
+    "reasoning": "DeltaFrame sends explicit user-created checkpoints and changelogs to the configured beta backend."
+  }
+}
